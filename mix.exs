@@ -42,7 +42,7 @@ defmodule NifExtractous.MixProject do
   defp deps do
     [
       {:rustler_precompiled, "~> 0.8"},
-      {:rustler, "~> 0.36.0", runtime: false}
+      {:rustler, ">= 0.0.0", optional: true}
     ]
   end
 end
