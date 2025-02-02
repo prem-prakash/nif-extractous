@@ -21,7 +21,7 @@ jobs:
 
     env:
         RUSTLER_NIF_VERSION: ${{ matrix.nif }}
-        CARGO_TARGET_DIR: "native/nif_extractous" 
+        CARGO_TARGET_DIR: "native/nif_extractous/target" 
     steps:
     - name: Checkout source code
       uses: actions/checkout@v4

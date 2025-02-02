@@ -2,6 +2,3 @@
 resolver = "2"
 
 members = ["native/nif_extractous"]
-
-[workspace.build]
-target-dir = "native/nif_extractous"
