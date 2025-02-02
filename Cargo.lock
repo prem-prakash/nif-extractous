@@ -1000,7 +1000,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "nifextractous"
+name = "nif_extractous"
 version = "0.1.0"
 dependencies = [
  "extractous",

@@ -1,11 +1,11 @@
 [package]
-name = "nifextractous"
+name = "nif_extractous"
 version = "0.1.0"
 authors = []
 edition = "2021"
 
 [lib]
-name = "nifextractous"
+name = "nif_extractous"
 crate-type = ["cdylib"]
 
 [dependencies]
