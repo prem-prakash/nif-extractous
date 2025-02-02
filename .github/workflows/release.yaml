@@ -17,12 +17,7 @@ jobs:
         nif: ["2.17"]
         job:
           - { target: aarch64-apple-darwin        , os: macos-14      }
-        #   - { target: aarch64-unknown-linux-gnu   , os: ubuntu-20.04 , use-cross: true }
-        #   - { target: aarch64-unknown-linux-musl  , os: ubuntu-20.04 , use-cross: true }
-        #   - { target: arm-unknown-linux-gnueabihf , os: ubuntu-20.04 , use-cross: true }
-        #   - { target: riscv64gc-unknown-linux-gnu , os: ubuntu-20.04 , use-cross: true }
           - { target: x86_64-unknown-linux-gnu    , os: ubuntu-20.04  }
-        #   - { target: x86_64-unknown-linux-musl   , os: ubuntu-20.04 , use-cross: true }
 
     env:
         RUSTLER_NIF_VERSION: ${{ matrix.nif }}
@@ -50,11 +45,18 @@ jobs:
         toolchain: stable
         target: ${{ matrix.job.target }}
 
+    - name: Install SDKMAN! and GraalVM Java
+      shell: bash
+      run: |
+        curl -s "https://get.sdkman.io" | bash
+        source "$HOME/.sdkman/bin/sdkman-init.sh"
+        sdk install java 23.0.1-graalce
+
     - name: Build the project
       id: build-crate
       uses: philss/rustler-precompiled-action@v1.1.4
       with:
-        project-name: example
+        project-name: nif-extractous
         project-version: ${{ env.PROJECT_VERSION }}
         target: ${{ matrix.job.target }}
         nif-version: ${{ matrix.nif }}
@@ -68,7 +70,7 @@ jobs:
         path: ${{ steps.build-crate.outputs.file-path }}
 
     - name: Publish archives and packages
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       with:
         files: |
           ${{ steps.build-crate.outputs.file-path }}
