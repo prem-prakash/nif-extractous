@@ -11,4 +11,4 @@ fn extract_document(path: String) -> NifResult<(String, String)> {
     }
 }
 
-rustler::init!("Elixir.NifExtractous");
+rustler::init!("Elixir.NifExtractous.Native");

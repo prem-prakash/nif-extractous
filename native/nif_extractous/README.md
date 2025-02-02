@@ -7,7 +7,7 @@
 ## To load the NIF:
 
 ```elixir
-defmodule NifExtractous do
+defmodule NifExtractous.Native do
   use Rustler, otp_app: :nif_extractous, crate: "nif_extractous"
 
   # When your NIF is loaded, it will override this function.

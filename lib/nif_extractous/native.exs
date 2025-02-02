@@ -1,4 +1,4 @@
-defmodule NifExtractous do
+defmodule NifExtractous.Native do
   version = Mix.Project.config()[:version]
 
   use RustlerPrecompiled,
