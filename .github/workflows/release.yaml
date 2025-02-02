@@ -29,7 +29,7 @@ jobs:
 
     steps:
     - name: Checkout source code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Extract project version
       shell: bash
@@ -52,10 +52,10 @@ jobs:
         target: ${{ matrix.job.target }}
         nif-version: ${{ matrix.nif }}
         use-cross: ${{ matrix.job.use-cross }}
-        project-dir: "native/doc_extractor"
+        project-dir: "native/nifextractous"
 
     - name: Artifact upload
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ steps.build-crate.outputs.file-name }}
         path: ${{ steps.build-crate.outputs.file-path }}

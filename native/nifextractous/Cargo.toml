@@ -9,4 +9,4 @@ name = "nifextractous"
 crate-type = ["cdylib"]
 
 [dependencies]
-rustler = "0.34.0"
+rustler = "0.36.0"
