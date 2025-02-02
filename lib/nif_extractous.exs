@@ -5,7 +5,7 @@ defmodule NifExtractous do
     otp_app: :radiant_intel,
     crate: "doc_extractor",
     base_url:
-      "https://github.com/philss/rustler_precompilation_example/releases/download/v#{version}",
+      "https://github.com/snewcomer/nif-extractous/releases/v#{version}",
     force_build: System.get_env("RUSTLER_PRECOMPILATION_EXAMPLE_BUILD") in ["1", "true"],
     version: version
 
