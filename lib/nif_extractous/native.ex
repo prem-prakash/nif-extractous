@@ -4,6 +4,7 @@ defmodule NifExtractous.Native do
   use RustlerPrecompiled,
     otp_app: :nif_extractous,
     crate: "nif_extractous",
+    nif_versions: ["2.17"],
     base_url:
       "https://github.com/snewcomer/nif-extractous/releases/download/v#{version}",
     force_build: System.get_env("EXTRACTOUS_BUILD") in ["1", "true"],
