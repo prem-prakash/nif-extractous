@@ -56,7 +56,7 @@ jobs:
 
     - name: Build the project
       id: build-crate
-      uses: philss/rustler-precompiled-action@v1.1.4
+      uses: ./.github/actions/build_rs
       with:
         project-name: nif_extractous
         project-version: ${{ env.PROJECT_VERSION }}
@@ -64,12 +64,6 @@ jobs:
         nif-version: ${{ matrix.nif }}
         use-cross: ${{ matrix.job.use-cross }}
         project-dir: "./"
-
-    - name: Copy Tika Native Library
-      shell: bash
-      run: |
-        LIBS_PATH=$(find target -name "libtika_native.so" -path "*/libs/*")
-        cp $LIBS_PATH ${{ steps.build-crate.outputs.file-path }}/priv/native/libs/
 
     - name: Artifact upload
       uses: actions/upload-artifact@v4
