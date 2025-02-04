@@ -56,7 +56,7 @@ jobs:
 
     - name: Build the project
       id: build-crate
-      uses: .github/actions/build_rs
+      uses: ./.github/actions/build_rs
       with:
         project-name: nif_extractous
         project-version: ${{ env.PROJECT_VERSION }}
