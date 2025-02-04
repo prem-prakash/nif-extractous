@@ -56,7 +56,7 @@ jobs:
 
     - name: Build the project
       id: build-crate
-      uses: ./.github/actions/build_rs
+      uses: philss/rustler-precompiled-action@v1.1.4
       with:
         project-name: nif_extractous
         project-version: ${{ env.PROJECT_VERSION }}
@@ -64,6 +64,38 @@ jobs:
         nif-version: ${{ matrix.nif }}
         use-cross: ${{ matrix.job.use-cross }}
         project-dir: "./"
+
+    - name: Modify archive
+      shell: bash
+      run: |
+        TEMP_DIR=$(mktemp -d)
+        
+        tar -xzf "${{ steps.build-crate.outputs.file-path }}" -C "$TEMP_DIR" || { 
+            echo "::error::Failed to extract archive"; exit 1; 
+        }
+        
+        TIKA_LIB=$(find target -type f -path "*/libs/libtika_native.*" 2>/dev/null)
+
+        if [ -z "$TIKA_LIB" ]; then
+            echo "::error::Could not find libtika_native library in build directory"
+            if [ -d "build" ]; then
+                echo "Directory contents of build:"
+                ls -R build/
+            else
+                echo "Build directory does not exist."
+            fi
+            exit 1
+        fi
+        
+        cp "$TIKA_LIB" "$TEMP_DIR/$(basename "$TIKA_LIB")"
+        
+        cd "$TEMP_DIR" || exit 1
+        tar -czf "${{ steps.build-crate.outputs.file-path }}.new" ./*
+        cd - || exit 1
+        
+        mv "$TEMP_DIR/$(basename "${{ steps.build-crate.outputs.file-path }}").new" "${{ steps.build-crate.outputs.file-path }}"
+
+        rm -rf "$TEMP_DIR"
 
     - name: Artifact upload
       uses: actions/upload-artifact@v4
