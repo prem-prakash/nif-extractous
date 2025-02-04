@@ -4,6 +4,10 @@ defmodule NifExtractous.Native do
   use RustlerPrecompiled,
     otp_app: :nif_extractous,
     crate: "nif_extractous",
+    targets: ~w(
+      aarch64-apple-darwin
+      x86_64-unknown-linux-gnu
+    ),
     nif_versions: ["2.17"],
     base_url:
       "https://github.com/snewcomer/nif-extractous/releases/download/v#{version}",

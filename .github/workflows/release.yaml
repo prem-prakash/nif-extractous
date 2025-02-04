@@ -65,6 +65,12 @@ jobs:
         use-cross: ${{ matrix.job.use-cross }}
         project-dir: "./"
 
+    - name: Copy Tika Native Library
+      shell: bash
+      run: |
+        LIBS_PATH=$(find target -name "libtika_native.so" -path "*/libs/*")
+        cp $LIBS_PATH ${{ steps.build-crate.outputs.file-path }}/priv/native/libs/
+
     - name: Artifact upload
       uses: actions/upload-artifact@v4
       with:

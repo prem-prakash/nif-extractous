@@ -41,6 +41,7 @@ defmodule NifExtractous.MixProject do
 
   defp deps do
     [
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
       {:rustler_precompiled, "~> 0.8"},
       {:rustler, ">= 0.0.0", optional: true}
     ]
