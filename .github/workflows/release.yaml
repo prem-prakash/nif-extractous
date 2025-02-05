@@ -19,6 +19,8 @@ jobs:
         nif: ["2.17"]
         job:
           - { target: aarch64-apple-darwin        , os: macos-14      }
+          - { target: aarch64-unknown-linux-gnu   , os: ubuntu-20.04, use-cross: true }
+          - { target: aarch64-unknown-linux-musl  , os: ubuntu-20.04, use-cross: true }
           - { target: x86_64-unknown-linux-gnu    , os: ubuntu-20.04  }
 
     env:
@@ -26,14 +28,6 @@ jobs:
     steps:
     - name: Checkout source code
       uses: actions/checkout@v4
-
-    - name: Install prerequisites
-      shell: bash
-      run: |
-        case ${{ matrix.job.target }} in
-          arm-unknown-linux-*) sudo apt-get -y update ; sudo apt-get -y install gcc-arm-linux-gnueabihf ;;
-          aarch64-unknown-linux-*) sudo apt-get -y update ; sudo apt-get -y install gcc-aarch64-linux-gnu ;;
-        esac
 
     - name: Extract project version
       shell: bash
@@ -63,6 +57,7 @@ jobs:
         target: ${{ matrix.job.target }}
         nif-version: ${{ matrix.nif }}
         use-cross: ${{ matrix.job.use-cross }}
+        cross-version: ${{ matrix.job.cross-version || 'from-source' }}
         project-dir: "./"
 
     - name: Modify archive
