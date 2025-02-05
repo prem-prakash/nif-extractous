@@ -74,6 +74,13 @@ jobs:
             echo "::error::Failed to extract archive"; exit 1; 
         }
         
+        NIF_LIB=$(find "$TEMP_DIR" -type f -name "libnif_extractous*")
+
+        if [ -z "$NIF_LIB" ]; then
+            echo "::error::Could not find libnif_extractous library in archive"
+            exit 1
+        fi
+
         TIKA_LIB=$(find target -type f -path "*/libs/libtika_native.*" 2>/dev/null)
 
         if [ -z "$TIKA_LIB" ]; then
@@ -88,6 +95,16 @@ jobs:
         fi
         
         cp "$TIKA_LIB" "$TEMP_DIR/$(basename "$TIKA_LIB")"
+
+        # note seems duplicative but rolling with it for now
+        if [[ "${{ matrix.job.target }}" == *darwin* ]]; then
+            install_name_tool -add_rpath @loader_path "$NIF_LIB"
+            install_name_tool -change @rpath/libtika_native.dylib @loader_path/$(basename "$TIKA_LIB") "$NIF_LIB"
+        fi
+
+        if [[ "${{ matrix.job.target }}" == *linux* ]]; then
+            patchelf --set-rpath '$ORIGIN' "$NIF_LIB"
+        fi
         
         cd "$TEMP_DIR" || exit 1
         tar -czf "${{ steps.build-crate.outputs.file-path }}.new" ./*
