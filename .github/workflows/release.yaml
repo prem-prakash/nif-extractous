@@ -20,7 +20,6 @@ jobs:
         job:
           - { target: aarch64-apple-darwin        , os: macos-14      }
           - { target: aarch64-unknown-linux-gnu   , os: ubuntu-20.04, use-cross: true }
-          - { target: aarch64-unknown-linux-musl  , os: ubuntu-20.04, use-cross: true }
           - { target: x86_64-unknown-linux-gnu    , os: ubuntu-20.04  }
 
     env:
@@ -47,6 +46,15 @@ jobs:
         curl -s "https://get.sdkman.io" | bash
         source "$HOME/.sdkman/bin/sdkman-init.sh"
         sdk install java 23.0.1-graalce
+
+    - name: Install OpenSSL dependencies
+      if: matrix.job.target == 'aarch64-unknown-linux-gnu'
+      run: |
+        sudo apt-get update
+        sudo dpkg --add-architecture arm64
+        sudo apt-get update
+        sudo apt-get install -y pkg-config gcc-aarch64-linux-gnu
+        sudo apt-get install -y libssl-dev:arm64
 
     - name: Build the project
       id: build-crate

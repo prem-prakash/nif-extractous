@@ -6,6 +6,7 @@ defmodule NifExtractous.Native do
     crate: "nif_extractous",
     targets: ~w(
       aarch64-apple-darwin
+      aarch64-unknown-linux-gnu
       x86_64-unknown-linux-gnu
     ),
     nif_versions: ["2.17"],
