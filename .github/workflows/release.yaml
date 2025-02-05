@@ -68,13 +68,17 @@ jobs:
     - name: Modify archive
       shell: bash
       run: |
+        set -euo pipefail
+
         TEMP_DIR=$(mktemp -d)
         
         tar -xzf "${{ steps.build-crate.outputs.file-path }}" -C "$TEMP_DIR" || { 
             echo "::error::Failed to extract archive"; exit 1; 
         }
         
-        NIF_LIB=$(find "$TEMP_DIR" -type f -name "libnif_extractous*")
+        NIF_LIB=$(find "$TEMP_DIR" -type f -name "libnif_extractous*") || {
+            echo "::error::Failed to search for NIF library"; exit 1;
+        }
 
         if [ -z "$NIF_LIB" ]; then
             echo "::error::Could not find libnif_extractous library in archive"
@@ -82,24 +86,44 @@ jobs:
         fi
 
         TIKA_LIB=$(find target -type f -path "*/libs/libtika_native.*" 2>/dev/null)
+        TIKA_BUILD_LIB=$(find target -type f -path "*/nativeCompile/libtika_native.{so,dylib}" 2>/dev/null)
 
-        if [ -z "$TIKA_LIB" ]; then
-            echo "::error::Could not find libtika_native library in build directory"
-            if [ -d "build" ]; then
-                echo "Directory contents of build:"
-                ls -R build/
-            else
-                echo "Build directory does not exist."
+        echo "Found tika libraries at:"
+        echo "Build lib: $TIKA_BUILD_LIB"
+        echo "Libs lib: $TIKA_LIB"
+
+        if [ -z "$TIKA_BUILD_LIB" ] && [ -z "$TIKA_LIB" ]; then
+            echo "::error::Could not find libtika_native library in either location"
+            if [ -d "target" ]; then
+                echo "Directory contents of target:"
+                find target -type f -name "libtika_native.*"
             fi
             exit 1
         fi
-        
-        cp "$TIKA_LIB" "$TEMP_DIR/$(basename "$TIKA_LIB")"
 
-        # note seems duplicative but rolling with it for now
+        if [ -n "$TIKA_BUILD_LIB" ]; then
+            cp "$TIKA_BUILD_LIB" "$TEMP_DIR/$(basename "$TIKA_BUILD_LIB")"
+            TIKA_LIB="$TIKA_BUILD_LIB"
+        elif [ -n "$TIKA_LIB" ]; then
+            cp "$TIKA_LIB" "$TEMP_DIR/$(basename "$TIKA_LIB")"
+            TIKA_LIB="$TIKA_LIB"
+        fi
+
         if [[ "${{ matrix.job.target }}" == *darwin* ]]; then
-            install_name_tool -add_rpath @loader_path "$NIF_LIB"
-            install_name_tool -change @rpath/libtika_native.dylib @loader_path/$(basename "$TIKA_LIB") "$NIF_LIB"
+            echo "Before mods:"
+            otool -L "$NIF_LIB"
+
+            ORIGINAL_PATHS=$(otool -L "$NIF_LIB" | grep libtika_native | awk '{print $1}')
+
+            while IFS= read -r path; do
+                if [ -n "$path" ]; then
+                    echo "Changing path: $path"
+                    install_name_tool -change "$path" "@loader_path/$(basename "$TIKA_LIB")" "$NIF_LIB"
+                fi
+            done <<< "$ORIGINAL_PATHS"
+
+            echo "After mods:"
+            otool -L "$NIF_LIB"
         fi
 
         if [[ "${{ matrix.job.target }}" == *linux* ]]; then
@@ -107,10 +131,16 @@ jobs:
         fi
         
         cd "$TEMP_DIR" || exit 1
-        tar -czf "${{ steps.build-crate.outputs.file-path }}.new" ./*
+        tar -czf "${{ steps.build-crate.outputs.file-path }}.new" ./* || {
+            echo "::error::Failed to create new archive"
+            exit 1
+        }
         cd - || exit 1
         
-        mv "$TEMP_DIR/$(basename "${{ steps.build-crate.outputs.file-path }}").new" "${{ steps.build-crate.outputs.file-path }}"
+        mv "$TEMP_DIR/$(basename "${{ steps.build-crate.outputs.file-path }}").new" "${{ steps.build-crate.outputs.file-path }}" || {
+            echo "::error::Failed to move new archive"
+            exit 1
+        }
 
         rm -rf "$TEMP_DIR"
 
