@@ -19,8 +19,8 @@ jobs:
         nif: ["2.17"]
         job:
           - { target: aarch64-apple-darwin        , os: macos-14      }
-          - { target: aarch64-unknown-linux-gnu   , os: ubuntu-20.04, use-cross: true }
-          - { target: x86_64-unknown-linux-gnu    , os: ubuntu-20.04  }
+          # - { target: aarch64-unknown-linux-gnu   , os: ubuntu-24.04-arm, use-cross: true }
+          - { target: x86_64-unknown-linux-gnu    , os: ubuntu-24.04  }
 
     env:
         RUSTLER_NIF_VERSION: ${{ matrix.nif }}
@@ -45,16 +45,6 @@ jobs:
         shared-key: ${{ matrix.job.target }}-${{ matrix.nif }}
         workspaces: |
           native/nif_extractous
-
-    - name: Install OpenSSL dependencies
-      if: matrix.job.target == 'aarch64-unknown-linux-gnu'
-      run: |
-        echo "OPENSSL_DIR=/usr/include/aarch64-linux-gnu" >> $GITHUB_ENV
-        echo "OPENSSL_LIB_DIR=/usr/lib/aarch64-linux-gnu" >> $GITHUB_ENV
-
-        sudo dpkg --add-architecture arm64
-        sudo apt-get install -y pkg-config gcc-aarch64-linux-gnu
-        sudo apt-get install -y libssl-dev
 
     - name: Install SDKMAN! and GraalVM Java
       shell: bash
