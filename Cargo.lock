@@ -105,9 +105,9 @@ checksum = "1fd0f2584146f6f2ef48085050886acf353beff7305ebd1ae69500e27c67f64b"
 
 [[package]]
 name = "bytes"
-version = "1.9.0"
+version = "1.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "325918d6fe32f23b19878fe4b34794ae41fc19ddbe53b10571a4874d44ffd39b"
+checksum = "f61dac84819c6588b558454b194026eb1f09c293b9036ae9b159e74e73ab6cf9"
 
 [[package]]
 name = "bzip2"
@@ -132,9 +132,9 @@ dependencies = [
 
 [[package]]
 name = "cc"
-version = "1.2.11"
+version = "1.2.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e4730490333d58093109dc02c23174c3f4d490998c3fed3cc8e82d57afedb9cf"
+checksum = "755717a7de9ec452bf7f3f1a3099085deabd7f2962b861dae91ecd7a365903d2"
 dependencies = [
  "jobserver",
  "libc",
@@ -1005,6 +1005,7 @@ version = "0.5.1"
 dependencies = [
  "extractous",
  "openssl",
+ "openssl-sys",
  "rustler",
 ]
 
@@ -1276,9 +1277,9 @@ dependencies = [
 
 [[package]]
 name = "rustler"
-version = "0.36.0"
+version = "0.36.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1f7b219d7473cf473409665a4898d66688b34736e51bb5791098b0d3390e4c98"
+checksum = "f04a7b61bf2db5495d6c0d2eb4b3f0f366864d47f2482834656e25d1b25fe290"
 dependencies = [
  "inventory",
  "libloading 0.8.6",
@@ -1288,9 +1289,9 @@ dependencies = [
 
 [[package]]
 name = "rustler_codegen"
-version = "0.36.0"
+version = "0.36.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "743ec5267bd5f18fd88d89f7e729c0f43b97d9c2539959915fa1f234300bb621"
+checksum = "bf9365a04e3a3a4d3136953d97c67fd0a9c036d36197917961551c2cc1ecb385"
 dependencies = [
  "heck",
  "inventory",
