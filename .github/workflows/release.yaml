@@ -19,7 +19,7 @@ jobs:
         nif: ["2.17"]
         job:
           - { target: aarch64-apple-darwin        , os: macos-14      }
-          # - { target: aarch64-unknown-linux-gnu   , os: ubuntu-24.04-arm, use-cross: true }
+          - { target: aarch64-unknown-linux-gnu   , os: ubuntu-24.04, use-cross: true }
           - { target: x86_64-unknown-linux-gnu    , os: ubuntu-24.04  }
 
     env:
