@@ -15,4 +15,5 @@ defmodule NifExtractous.Native do
     version: version
 
   def extract_document(_path), do: :erlang.nif_error(:nif_not_loaded)
+  def extract_document_ocr(_path), do: :erlang.nif_error(:nif_not_loaded)
 end

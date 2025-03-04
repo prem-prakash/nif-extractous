@@ -12,3 +12,14 @@ This package bundles both the NIF library (`libnif_extractous`) and its dependen
 
 
 This ensures that the NIF library can find its Tika dependency without requiring system-wide installation of Tika or additional configuration. The library is self-contained and should work out of the box when added as a dependency.
+
+## Release
+
+- tag and push and wait for tags
+
+- build
+```sh
+EXTRACTOUS_BUILD=true mix rustler_precompiled.download NifExtractous.Native --all --ignore-unavailable --print
+```
+
+- mix hex.publish
