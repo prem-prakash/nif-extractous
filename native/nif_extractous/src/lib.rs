@@ -1,4 +1,4 @@
-use extractous::{Extractor, TesseractOcrConfig, PdfParserConfig, PdfOcrStrategy};
+use extractous::{Extractor, PdfParserConfig, PdfOcrStrategy};
 use rustler::NifResult;
 
 #[rustler::nif(schedule = "DirtyCpu")]
