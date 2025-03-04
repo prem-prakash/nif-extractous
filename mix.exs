@@ -1,7 +1,7 @@
 defmodule NifExtractous.MixProject do
   use Mix.Project
 
-  @version "0.10.0"
+  @version "0.11.0"
   @source_url "https://github.com/snewcomer/nif-extractous"
 
   def project do
