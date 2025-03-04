@@ -45,13 +45,6 @@ jobs:
         workspaces: |
           native/nif_extractous
 
-    - name: Install SDKMAN! and GraalVM Java
-      shell: bash
-      run: |
-        curl -s "https://get.sdkman.io" | bash
-        source "$HOME/.sdkman/bin/sdkman-init.sh"
-        sdk install java 23.0.2-graalce
-
     - name: Build the project
       id: build-crate
       uses: philss/rustler-precompiled-action@v1.1.4
