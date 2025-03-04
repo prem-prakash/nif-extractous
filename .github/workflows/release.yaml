@@ -19,7 +19,6 @@ jobs:
         nif: ["2.17"]
         job:
           - { target: aarch64-apple-darwin        , os: macos-14      }
-          - { target: aarch64-unknown-linux-gnu   , os: ubuntu-24.04, use-cross: true }
           - { target: x86_64-unknown-linux-gnu    , os: ubuntu-24.04  }
 
     env:
@@ -51,7 +50,7 @@ jobs:
       run: |
         curl -s "https://get.sdkman.io" | bash
         source "$HOME/.sdkman/bin/sdkman-init.sh"
-        sdk install java 23.0.1-graalce
+        sdk install java 23.0.2-graalce
 
     - name: Build the project
       id: build-crate
