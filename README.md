@@ -1,5 +1,17 @@
 # nif-extractous
 
+## Installation
+
+Add the following to your `mix.exs` file:
+
+```elixir
+def deps do
+  [
+    {:nif_extractous, "~> 0.12.0"}
+  ]
+end
+```
+
 ## Runtime Dependencies
 
 ref [extractous](https://github.com/yobix-ai/extractous)
